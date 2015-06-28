@@ -1,0 +1,44 @@
+html {
+  min-height: 100%;
+  background-color: #FFFFFF;
+  color: #4A4A4A;
+}
+
+body {
+  font-family: "Open Sans", "Helvetica", sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 0;
+  padding: 8vh;
+}
+
+/**
+ * 1. Default typography styles have an annoying top margin, which makes it
+ *    difficult to lay out type nicely.
+ */
+h1, h2, h3, h4, h5, h6, p {
+  margin-top: 0; /* 1 */
+}
+
+.selectedPhrase {
+  display: inline-block;
+  color: #FF4600;
+  position: relative;
+}
+
+  .selectedPhrase__controls {
+    position: absolute;
+    top: -100%;
+    left: calc(50% - 10px);
+    background-color: #FF4600;
+    color: white;
+    border-radius: 100%;
+    line-height: 1;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 10px;
+  }
