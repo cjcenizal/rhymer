@@ -1,51 +1,47 @@
 'use strict';
 
-var SelectedPhrase = require('../SelectedPhrase/SelectedPhrase');
+var CustomHtml = require('../../lib/CustomHtml');
+var MediumButton = require('../../lib/MediumButton');
+var Editor = require('react-medium-editor');
+var RhymeActions = require('../../actions/RhymeActions');
 
 var React = require('react');
 var ReactPropTypes = React.PropTypes;
 
-function getSelectedText() {
-  var text = '';
-  if (window.getSelection) {
-    text = window.getSelection().toString();
-  } else if (document.selection && document.selection.type != 'Control') {
-    text = document.selection.createRange().text;
-  }
-  return text;
-}
-
 module.exports = React.createClass({
 
   propTypes: {
-    phrases: ReactPropTypes.array
+    lyric: ReactPropTypes.string
   },
 
-  handleOnMouseUp: function() {
-    var selection = getSelectedText();
-    /**
-    
-    SelectedPhraseStore contains selected phrase
-    Highlights it on screen with SelectedPhrase component
-    Clicking on the SelectedPhrase creates a new Rhyme
-    The Rhyme stores the value (NOT the reference) of the selected phrase
-    The Rhyme displays a list of words to choose from
-    It can be clicked again to choose new words
-
-    */
+  handleChange: function() {
+    var text = React.findDOMNode(this.refs.contentEditable).innerHTML;
+    console.log('handleChange', text)
+    RhymeActions.updateLyric(this.props.lyric.index, text);
   },
 
   render: function() {
-    var words = this.props.phrases.map(function(phrase) {
-      if (!phrase.selected) {
-        return ' ' + phrase.word + ' ';
-      }
-      return (
-        <SelectedPhrase phrase={phrase} />
-      );
-    });
+    var self = this;
     return (
-      <div onMouseUp={this.handleOnMouseUp}>{words}</div>
+      <div>
+        <Editor
+          ref="contentEditable"
+          text={this.props.lyric.text}
+          onChange={this.handleChange}
+          options={{
+            buttons: ['rhyme'],
+            extensions: {
+              'rhyme': new CustomHtml({
+                buttonText: "+",
+                onChange: self.handleChange,
+                getHtml: function(selectedText) {
+                  return ' <span class="rhyme">' + selectedText + '</span> '
+                }
+              })
+            }
+          }}
+        />
+      </div>
     );
   }
 

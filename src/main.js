@@ -10,7 +10,7 @@ var LyricsStore = require('./domain/LyricsStore');
 var LyricsList = require('./ui/lyricsList/LyricsList');
 
 React.render(
-  <div>
+  <div className="lyrics">
     <LyricsList />
   </div>,
   document.body

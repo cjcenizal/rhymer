@@ -27,12 +27,6 @@ var RhymeStore = assign({}, EventEmitter.prototype, {
 
 RhymeStore.dispatchToken = AppDispatcher.register(function(action) {
   switch (action.type) {
-
-    // case ActionTypes.STARTED_APP:
-    //   init();
-    //   RhymeStore.emitChange();
-    //   break;
-
     default:
       // do nothing
   }

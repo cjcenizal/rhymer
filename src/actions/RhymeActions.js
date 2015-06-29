@@ -7,10 +7,14 @@ var ActionTypes = AppConstants.ActionTypes;
 
 module.exports = {
 
-  // startApp: function() {
-  //   AppDispatcher.dispatch({
-  //     type: ActionTypes.STARTED_APP
-  //   });
-  // }
+  updateLyric: function(index, text) {
+    AppDispatcher.dispatch({
+      type: ActionTypes.LYRIC_UPDATED,
+      payload: {
+        index: index,
+        text: text
+      }
+    });
+  }
 
 };

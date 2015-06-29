@@ -9,24 +9,25 @@ var _ = require('underscore');
 var ActionTypes = AppConstants.ActionTypes;
 var CHANGE_EVENT = 'change';
 
-var _lyrics = [{
-  phrases: [{
-    word: 'Bust'
+var _lyrics = [
+  {
+    text: 'Bust a rhyme'
   }, {
-    word: 'a'
-  }, {
-    word: 'rhyme',
-    selected: true
-  }]
-}, {
-  phrases: [{
-    word: 'Just'
-  }, {
-    word: 'in'
-  }, {
-    word: 'time'
-  }]
-}];
+    text: 'Just in time'
+  }
+];
+
+var _indexPhrases = function() {
+  _.each(_lyrics, function(lyric, lyricIndex) {
+    lyric.index = lyricIndex;
+  })
+};
+
+var _updateLyricAtIndex = function(index, text) {
+  _lyrics[index].text = text;
+};
+
+_indexPhrases();
 
 var LyricsStore = assign({}, EventEmitter.prototype, {
 
@@ -51,10 +52,10 @@ var LyricsStore = assign({}, EventEmitter.prototype, {
 LyricsStore.dispatchToken = AppDispatcher.register(function(action) {
   switch (action.type) {
 
-    // case ActionTypes.STARTED_APP:
-    //   init();
-    //   LyricsStore.emitChange();
-    //   break;
+    case ActionTypes.LYRIC_UPDATED:
+      _updateLyricAtIndex(action.payload.index, action.payload.text);
+      LyricsStore.emitChange();
+      break;
 
     default:
       // do nothing
