@@ -16,9 +16,8 @@
     "clean": "rm -f -R build && mkdir build && mkdir -p build/{styles,scripts}",
     "css": "sass src/main.scss build/styles/main.css && postcss --use autoprefixer -o build/styles/main.css build/styles/main.css",
     "html": "jade src/index.jade --out build --pretty",
-    "copy": "",
     "js": "browserify -t reactify src/main.js -o build/scripts/main.js",
-    "build": "npm run clean && npm run copy && npm run js && npm run css && npm run html",
+    "build": "npm run clean && npm run js && npm run css && npm run html",
     "serve": "ws -d build"
   }
 }
