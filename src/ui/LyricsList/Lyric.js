@@ -1,9 +1,9 @@
 'use strict';
 
-var CustomHtml = require('../../lib/CustomHtml');
-var MediumButton = require('../../lib/MediumButton');
-var Editor = require('react-medium-editor');
+var Editor = require('../editor/Editor');
+var Rhyme = require('./Rhyme');
 var RhymeActions = require('../../actions/RhymeActions');
+var _ = require('underscore');
 
 var React = require('react');
 var ReactPropTypes = React.PropTypes;
@@ -11,36 +11,49 @@ var ReactPropTypes = React.PropTypes;
 module.exports = React.createClass({
 
   propTypes: {
-    lyric: ReactPropTypes.string
+    lyric: ReactPropTypes.object
   },
 
-  handleChange: function() {
-    var text = React.findDOMNode(this.refs.contentEditable).innerHTML;
-    console.log('handleChange', text)
-    RhymeActions.updateLyric(this.props.lyric.index, text);
+  handleChange: function(phrase, text) {
+    console.log('handleChange', text);
+
+    // If no rhyme added, update phrase with new text.
+    if (text.indexOf('+%') == -1) {
+      return RhymeActions.updatePhrase(phrase, text);
+    }
+
+    // Add rhyme.
+    var splitOpeningToken = text.split('+%');
+    var splitClosingToken = splitOpeningToken[1].split('%+');
+    var rhyme = [splitOpeningToken[0], splitClosingToken[0], splitClosingToken[1]];
+    RhymeActions.addRhymeToPhrase(phrase, rhyme);
   },
 
   render: function() {
+    console.log('render', this.props.lyric)
     var self = this;
-    return (
-      <div>
+    var content = this.props.lyric.phrases.map(function(phrase) {
+      // Create a Rhyme if the phrase has a source.
+      if (phrase.source) {
+        return (
+          <Rhyme
+            key={phrase.index + phrase.lyric.update}
+            phrase={phrase}
+          />
+        );
+      }
+      // Otherwise it's just regular, rhymable text.
+      return (
         <Editor
-          ref="contentEditable"
-          text={this.props.lyric.text}
-          onChange={this.handleChange}
-          options={{
-            buttons: ['rhyme'],
-            extensions: {
-              'rhyme': new CustomHtml({
-                buttonText: "+",
-                onChange: self.handleChange,
-                getHtml: function(selectedText) {
-                  return ' <span class="rhyme">' + selectedText + '</span> '
-                }
-              })
-            }
-          }}
+          key={phrase.index + phrase.lyric.update}
+          phrase={phrase}
+          onChange={self.handleChange}
         />
+      );
+    });
+    return (
+      <div className="lyric">
+        {content}
       </div>
     );
   }

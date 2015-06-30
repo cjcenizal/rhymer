@@ -38,9 +38,14 @@ p {
 }
 
 [contenteditable="true"] {
-  border-bottom: 1px solid transparent;
   &:focus {
     outline: none;
+  }
+}
+
+.lyric {
+  border-bottom: 1px solid transparent;
+  &:hover {
     border-bottom-color: #E1E1E1;
   }
 }

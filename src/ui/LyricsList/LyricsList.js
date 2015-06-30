@@ -28,7 +28,7 @@ module.exports = React.createClass({
   render: function() {
 
     var lyrics = this.state.lyrics.map(function(lyric) {
-      return <Lyric lyric={lyric} />;
+      return <Lyric key={lyric.index} lyric={lyric} />;
     });
 
     return (

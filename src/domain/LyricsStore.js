@@ -9,25 +9,76 @@ var _ = require('underscore');
 var ActionTypes = AppConstants.ActionTypes;
 var CHANGE_EVENT = 'change';
 
+// var _lyrics = [
+//   {phrases: [
+//     {
+//       text: 'I don\'t really think the fact that I\'m Slim matters'
+//     }
+//   ]}, {phrases: [
+//     {
+//       text: 'A plaque of'
+//     }, {
+//       source: 'platinum status',
+//       text: 'platinum status'
+//     }, {
+//       text: 'is whack if I\'m not the baddest'
+//     }
+//   ]}
+// ];
+
 var _lyrics = [
-  {
-    text: 'Bust a rhyme'
-  }, {
-    text: 'Just in time'
-  }
+  {phrases: [
+    {
+      text: 'One two'
+    }
+  ]}
 ];
 
-var _indexPhrases = function() {
+var _buildIndices = function() {
   _.each(_lyrics, function(lyric, lyricIndex) {
     lyric.index = lyricIndex;
+    if (!lyric.update) {
+      lyric.update = 1;
+    }
+    _.each(lyric.phrases, function(phrase, phraseIndex) {
+      phrase.index = phraseIndex;
+      phrase.lyric = lyric;
+    });
   })
 };
+_buildIndices();
 
-var _updateLyricAtIndex = function(index, text) {
-  _lyrics[index].text = text;
+var _addRhymeToPhrase = function(phrase, rhyme) {
+  var lyric = _lyrics[phrase.lyric.index];
+  lyric.update ++;
+  // Convert the new rhyme text into phrase objects.
+  var newPhrases = [];
+  _.each(rhyme, function(text, index) {
+    // Ignore text that's empty.
+    if (text.length) {
+      var phraseObject = {
+        text: text
+      };
+      if (index == 1) {
+        phraseObject.source = text;
+      }
+      newPhrases.push(phraseObject);
+    }
+  });
+  // Splice the new rhyme phrases into the lyric's existing phrases,
+  // and removed the outdated phrase.
+  var args = [phrase.index, 1].concat(newPhrases);
+  Array.prototype.splice.apply(lyric.phrases, args);
+  _buildIndices();
+  console.log("lyrics", _lyrics)
 };
 
-_indexPhrases();
+var _updatePhrase = function(phrase, text) {
+  var lyric = _lyrics[phrase.lyric.index];
+  console.log('lyric', lyric)
+  lyric.phrases[phrase.index].text = text;
+  _buildIndices();
+};
 
 var LyricsStore = assign({}, EventEmitter.prototype, {
 
@@ -52,8 +103,13 @@ var LyricsStore = assign({}, EventEmitter.prototype, {
 LyricsStore.dispatchToken = AppDispatcher.register(function(action) {
   switch (action.type) {
 
-    case ActionTypes.LYRIC_UPDATED:
-      _updateLyricAtIndex(action.payload.index, action.payload.text);
+    case ActionTypes.RHYME_ADDED_TO_PHRASE:
+      _addRhymeToPhrase(action.payload.phrase, action.payload.rhyme);
+      LyricsStore.emitChange();
+      break;
+
+    case ActionTypes.PHRASE_UPDATED:
+      _updatePhrase(action.payload.phrase, action.payload.text);
       LyricsStore.emitChange();
       break;
 

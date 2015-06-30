@@ -7,11 +7,21 @@ var ActionTypes = AppConstants.ActionTypes;
 
 module.exports = {
 
-  updateLyric: function(index, text) {
+  addRhymeToPhrase: function(phrase, rhyme) {
     AppDispatcher.dispatch({
-      type: ActionTypes.LYRIC_UPDATED,
+      type: ActionTypes.RHYME_ADDED_TO_PHRASE,
       payload: {
-        index: index,
+        phrase: phrase,
+        rhyme: rhyme
+      }
+    });
+  },
+
+  updatePhrase: function(phrase, text) {
+    AppDispatcher.dispatch({
+      type: ActionTypes.PHRASE_UPDATED,
+      payload: {
+        phrase: phrase,
         text: text
       }
     });
