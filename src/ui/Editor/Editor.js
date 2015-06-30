@@ -10,29 +10,31 @@ module.exports = React.createClass({
   displayName: 'exports',
 
   propTypes: {
-    phrase: ReactPropTypes.object
+    phrase: ReactPropTypes.object,
+    onEdit: ReactPropTypes.func,
+    onAddRhyme: ReactPropTypes.func
   },
 
   componentDidMount: function componentDidMount() {
     var _this = this;
-
     var dom = this.getDOMNode();
     var options = {
+      disableReturn: true,
       placeholder: '',
       buttons: ['rhyme'],
       extensions: {
         'rhyme': new RhymeButton({
           buttonText: '+',
-          onChange: _this.change,
+          onChange: _this.onAddRhyme,
           getHtml: function(selectedText) {
-            return '+%' + selectedText + '%+';
+            return selectedText;
           }
         })
       }
     };
     this.medium = new MediumEditor(dom, options);
     this.medium.subscribe('editableInput', function (e) {
-      _this.change();
+      _this.onEdit();
     });
   },
 
@@ -41,17 +43,20 @@ module.exports = React.createClass({
   },
 
   render: function render() {
-    return React.createElement('span', {
-      className: this.props.className,
-      contentEditable: true,
-      dangerouslySetInnerHTML: { __html: this.props.phrase.text }
-    });
+    return (
+      <span
+        className="editor"
+        contentEditable="true"
+      >{this.props.phrase.text}</span>
+    );
   },
 
-  change: function change() {
-    if (this.props.onChange) {
-      var dom = this.getDOMNode();
-      this.props.onChange(this.props.phrase, dom.innerHTML);
-    }
+  onAddRhyme: function onAddRhyme(payload) {
+    this.props.onAddRhyme(this.props.phrase, payload.endIndex, payload.text);
+  },
+
+  onEdit: function onEdit() {
+    var dom = this.getDOMNode();
+    this.props.onEdit(this.props.phrase, dom.textContent);
   }
 });

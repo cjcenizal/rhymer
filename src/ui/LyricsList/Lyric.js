@@ -14,23 +14,17 @@ module.exports = React.createClass({
     lyric: ReactPropTypes.object
   },
 
-  handleChange: function(phrase, text) {
-    console.log('handleChange', text);
+  handleEdit: function(phrase, text) {
+    return RhymeActions.updatePhrase(phrase, text);
+  },
 
-    // If no rhyme added, update phrase with new text.
-    if (text.indexOf('+%') == -1) {
-      return RhymeActions.updatePhrase(phrase, text);
-    }
-
-    // Add rhyme.
-    var splitOpeningToken = text.split('+%');
-    var splitClosingToken = splitOpeningToken[1].split('%+');
-    var rhyme = [splitOpeningToken[0], splitClosingToken[0], splitClosingToken[1]];
+  handleAddRhyme: function(phrase, endIndex, text) {
+    var phraseText = phrase.text;
+    var rhyme = [phraseText.substring(0, endIndex), text, phraseText.substring(endIndex, phraseText.length)];
     RhymeActions.addRhymeToPhrase(phrase, rhyme);
   },
 
   render: function() {
-    console.log('render', this.props.lyric)
     var self = this;
     var content = this.props.lyric.phrases.map(function(phrase) {
       // Create a Rhyme if the phrase has a source.
@@ -47,7 +41,8 @@ module.exports = React.createClass({
         <Editor
           key={phrase.index + phrase.lyric.update}
           phrase={phrase}
-          onChange={self.handleChange}
+          onEdit={self.handleEdit}
+          onAddRhyme={self.handleAddRhyme}
         />
       );
     });

@@ -31,6 +31,13 @@ p {
   max-width: 800px;
 }
 
+.editor {
+  p {
+    display: inline;
+    margin: 0;
+  }
+}
+
 .rhyme {
   color: #FF4600;
   border-bottom: 1px dotted #FF4600;

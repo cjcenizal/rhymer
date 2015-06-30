@@ -9,27 +9,19 @@ var _ = require('underscore');
 var ActionTypes = AppConstants.ActionTypes;
 var CHANGE_EVENT = 'change';
 
-// var _lyrics = [
-//   {phrases: [
-//     {
-//       text: 'I don\'t really think the fact that I\'m Slim matters'
-//     }
-//   ]}, {phrases: [
-//     {
-//       text: 'A plaque of'
-//     }, {
-//       source: 'platinum status',
-//       text: 'platinum status'
-//     }, {
-//       text: 'is whack if I\'m not the baddest'
-//     }
-//   ]}
-// ];
-
 var _lyrics = [
   {phrases: [
     {
-      text: 'One two'
+      text: 'I don\'t really think the fact that I\'m Slim matters'
+    }
+  ]}, {phrases: [
+    {
+      text: 'A plaque of'
+    }, {
+      source: 'platinum status',
+      text: 'platinum status'
+    }, {
+      text: 'is whack if I\'m not the baddest'
     }
   ]}
 ];
@@ -70,12 +62,10 @@ var _addRhymeToPhrase = function(phrase, rhyme) {
   var args = [phrase.index, 1].concat(newPhrases);
   Array.prototype.splice.apply(lyric.phrases, args);
   _buildIndices();
-  console.log("lyrics", _lyrics)
 };
 
 var _updatePhrase = function(phrase, text) {
   var lyric = _lyrics[phrase.lyric.index];
-  console.log('lyric', lyric)
   lyric.phrases[phrase.index].text = text;
   _buildIndices();
 };
