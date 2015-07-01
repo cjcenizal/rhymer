@@ -44,10 +44,10 @@ module.exports = React.createClass({
 
   render: function render() {
     return (
-      <span
+      <div
         className="editor"
         contentEditable="true"
-      >{this.props.phrase.text}</span>
+      >{this.props.phrase.text}</div>
     );
   },
 

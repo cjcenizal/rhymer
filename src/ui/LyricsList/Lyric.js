@@ -1,7 +1,7 @@
 'use strict';
 
 var Editor = require('../editor/Editor');
-var Rhyme = require('./Rhyme');
+var Rhyme = require('../rhyme/Rhyme');
 var RhymeActions = require('../../actions/RhymeActions');
 var _ = require('underscore');
 

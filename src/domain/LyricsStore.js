@@ -19,7 +19,25 @@ var _lyrics = [
       text: 'A plaque of'
     }, {
       source: 'platinum status',
-      text: 'platinum status'
+      value: {
+        id: 0,
+        text: 'platinum status'
+      },
+      options: [
+        {
+          id: 0,
+          text: 'platinum status'
+        }, {
+          id: 1,
+          text: 'got in the palace'
+        }, {
+          id: 2,
+          text: 'fracking phallus'
+        }, {
+          id: 3,
+          text: 'a cotton chalice'
+        }
+      ]
     }, {
       text: 'is whack if I\'m not the baddest'
     }
@@ -48,13 +66,22 @@ var _addRhymeToPhrase = function(phrase, rhyme) {
   _.each(rhyme, function(text, index) {
     // Ignore text that's empty.
     if (text.length) {
-      var phraseObject = {
-        text: text
-      };
       if (index == 1) {
-        phraseObject.source = text;
+        var rhymeObject = {
+          source: text,
+          value: {
+            id: -1,
+            text: text
+          },
+          options: []
+        };
+        newPhrases.push(rhymeObject);
+      } else {
+        var phraseObject = {
+          text: text
+        };
+        newPhrases.push(phraseObject);
       }
-      newPhrases.push(phraseObject);
     }
   });
   // Splice the new rhyme phrases into the lyric's existing phrases,
@@ -68,6 +95,10 @@ var _updatePhrase = function(phrase, text) {
   var lyric = _lyrics[phrase.lyric.index];
   lyric.phrases[phrase.index].text = text;
   _buildIndices();
+};
+
+var _selectRhyme = function(phrase, option) {
+  phrase.value = option;
 };
 
 var LyricsStore = assign({}, EventEmitter.prototype, {
@@ -100,6 +131,11 @@ LyricsStore.dispatchToken = AppDispatcher.register(function(action) {
 
     case ActionTypes.PHRASE_UPDATED:
       _updatePhrase(action.payload.phrase, action.payload.text);
+      LyricsStore.emitChange();
+      break;
+
+    case ActionTypes.RHYME_SELECTED:
+      _selectRhyme(action.payload.phrase, action.payload.option);
       LyricsStore.emitChange();
       break;
 

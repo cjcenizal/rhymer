@@ -25,6 +25,16 @@ module.exports = {
         text: text
       }
     });
+  },
+
+  selectRhyme: function(phrase, option) {
+    AppDispatcher.dispatch({
+      type: ActionTypes.RHYME_SELECTED,
+      payload: {
+        phrase: phrase,
+        option: option
+      }
+    });
   }
 
 };
