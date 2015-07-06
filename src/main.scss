@@ -1,3 +1,5 @@
+$spaceMargin: 0.259em;
+
 html {
   min-height: 100%;
   background-color: #FFFFFF;
@@ -11,6 +13,7 @@ body {
   margin: 0;
   display: flex;
   justify-content: center;
+  margin-top: 100px;
 }
 
 /**
@@ -29,6 +32,11 @@ p {
   padding: 40px;
   width: 800px;
   max-width: 800px;
+  position: relative;
+}
+
+.phrases {
+  display: inline-block;
 }
 
 .editor {
@@ -43,7 +51,7 @@ p {
   display: inline-block;
   color: #FF4600;
   border-bottom: 1px dotted #FF4600;
-  margin: 0 0.25em;
+  margin: 0 $spaceMargin;
   cursor: pointer;
   position: relative;
 }
@@ -60,6 +68,7 @@ p {
   white-space: nowrap;
   min-width: 100%;
   display: none;
+  z-index: 10;
   &.is-visible {
     display: block;
   }
@@ -86,6 +95,76 @@ p {
   &:hover {
     border-bottom-color: #E1E1E1;
   }
+}
+
+.phraseGroup {
+  display: inline-block;
+  position: relative;
+}
+
+.shufflePhrase {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: white;
+
+  &.is-shuffle-phrase-visible {
+    display: block;
+  }
+}
+
+.shuffleWord {
+  position: relative;
+  display: inline-block;
+
+  & + & {
+    margin-left: $spaceMargin;
+  }
+}
+
+  .shuffleMarker {
+    position: absolute;
+    background-color: #FF4600;
+    border-radius: 4px;
+    color: white;
+    font-size: 14px;
+    padding: 4px 12px;
+    bottom: 100%;
+    white-space: nowrap;
+
+    &.is-marker-left {
+      left: -100%;
+      transform: translateX(50%);
+    }
+
+    &.is-marker-right {
+      right: -100%;
+      transform: translateX(-50%);
+    }
+    
+    &:after {
+      position: absolute;
+      left: 50%;
+      display: block;
+      margin-left: -8px;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      content: "";
+      border-width: 8px 8px 0 8px;
+      top: 29px;
+      border-color: #FF4600 transparent transparent transparent; 
+    }
+  }
+
+  .shuffleWordTarget {
+    display: inline-block;
+    pointer-events: none;
+  }
+
+.shuffleRhyme {
+  display: inline-block;
 }
 
 //- Medium editor

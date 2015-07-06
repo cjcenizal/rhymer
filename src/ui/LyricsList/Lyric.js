@@ -1,7 +1,9 @@
 'use strict';
 
-var Editor = require('../editor/Editor');
-var Rhyme = require('../rhyme/Rhyme');
+var Editor = require('../Editor/Editor');
+var Rhyme = require('../Rhyme/Rhyme');
+var Phrase = require('./Phrase');
+var ShufflePhrase = require('../ShuffleList/ShufflePhrase');
 var RhymeActions = require('../../actions/RhymeActions');
 var _ = require('underscore');
 
@@ -12,16 +14,6 @@ module.exports = React.createClass({
 
   propTypes: {
     lyric: ReactPropTypes.object
-  },
-
-  handleEdit: function(phrase, text) {
-    return RhymeActions.updatePhrase(phrase, text);
-  },
-
-  handleAddRhyme: function(phrase, endIndex, text) {
-    var phraseText = phrase.text;
-    var rhyme = [phraseText.substring(0, endIndex), text, phraseText.substring(endIndex, phraseText.length)];
-    RhymeActions.addRhymeToPhrase(phrase, rhyme);
   },
 
   render: function() {
@@ -38,12 +30,14 @@ module.exports = React.createClass({
       }
       // Otherwise it's just regular, rhymable text.
       return (
-        <Editor
-          key={phrase.index + phrase.lyric.update}
-          phrase={phrase}
-          onEdit={self.handleEdit}
-          onAddRhyme={self.handleAddRhyme}
-        />
+        <div className="phraseGroup">
+          <Phrase
+            phrase={phrase}
+          />
+          <ShufflePhrase
+            phrase={phrase}
+          />
+        </div>
       );
     });
     return (

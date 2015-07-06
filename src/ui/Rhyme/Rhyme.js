@@ -2,6 +2,7 @@
 
 var RhymeOptions = require('./RhymeOptions');
 var RhymeActions = require('../../actions/RhymeActions');
+var ShuffleActions = require('../../actions/ShuffleActions');
 
 var React = require('react');
 var ReactPropTypes = React.PropTypes;
@@ -18,6 +19,14 @@ module.exports = React.createClass({
     };
   },
 
+  onDragStart: function() {
+    ShuffleActions.startShuffling(this.props.phrase.value.text);
+  },
+
+  onDragEnd: function() {
+    ShuffleActions.stopShuffling();
+  },
+
   onClick: function() {
     this.setState({
       isVisible: !this.state.isVisible
@@ -31,8 +40,11 @@ module.exports = React.createClass({
   render: function() {
     return (
       <div
-        onClick={this.onClick}
         className="rhyme"
+        draggable="true"
+        onDragStart={this.onDragStart}
+        onDragEnd={this.onDragEnd}
+        onClick={this.onClick}
       >
         <div className="rhyme__text">{this.props.phrase.value.text}</div>
         <RhymeOptions

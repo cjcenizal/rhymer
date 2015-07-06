@@ -2,16 +2,14 @@
 
 var React = require('react');
 
-// Define stores.
-var RhymesStore = require('./domain/RhymesStore');
+// Define stores so they're available before the UI interacts with them.
 var LyricsStore = require('./domain/LyricsStore');
+var RhymesStore = require('./domain/RhymesStore');
+var ShuffleStore = require('./domain/ShuffleStore');
 
 // Build + render app.
-var LyricsList = require('./ui/lyricsList/LyricsList');
-
+var App = require('./ui/App/App');
 React.render(
-  <div className="lyrics">
-    <LyricsList />
-  </div>,
+  <App />,
   document.body
 );

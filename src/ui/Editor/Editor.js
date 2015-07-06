@@ -17,7 +17,7 @@ module.exports = React.createClass({
 
   componentDidMount: function componentDidMount() {
     var _this = this;
-    var dom = this.getDOMNode();
+    var node = this.getDOMNode();
     var options = {
       disableReturn: true,
       placeholder: '',
@@ -32,7 +32,7 @@ module.exports = React.createClass({
         })
       }
     };
-    this.medium = new MediumEditor(dom, options);
+    this.medium = new MediumEditor(node, options);
     this.medium.subscribe('editableInput', function (e) {
       _this.onEdit();
     });

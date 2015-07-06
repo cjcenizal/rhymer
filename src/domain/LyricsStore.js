@@ -44,7 +44,7 @@ var _lyrics = [
   ]}
 ];
 
-var _buildIndices = function() {
+var _parseLyrics = function() {
   _.each(_lyrics, function(lyric, lyricIndex) {
     lyric.index = lyricIndex;
     if (!lyric.update) {
@@ -53,10 +53,14 @@ var _buildIndices = function() {
     _.each(lyric.phrases, function(phrase, phraseIndex) {
       phrase.index = phraseIndex;
       phrase.lyric = lyric;
+      if (phrase.text) {
+        phrase.words = phrase.text.split(' ');
+      }
     });
   })
+  console.log(_lyrics)
 };
-_buildIndices();
+_parseLyrics();
 
 var _addRhymeToPhrase = function(phrase, rhyme) {
   var lyric = _lyrics[phrase.lyric.index];
@@ -88,13 +92,13 @@ var _addRhymeToPhrase = function(phrase, rhyme) {
   // and removed the outdated phrase.
   var args = [phrase.index, 1].concat(newPhrases);
   Array.prototype.splice.apply(lyric.phrases, args);
-  _buildIndices();
+  _parseLyrics();
 };
 
 var _updatePhrase = function(phrase, text) {
   var lyric = _lyrics[phrase.lyric.index];
   lyric.phrases[phrase.index].text = text;
-  _buildIndices();
+  _parseLyrics();
 };
 
 var _selectRhyme = function(phrase, option) {
